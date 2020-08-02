@@ -2,12 +2,12 @@
  * @Author: chenhaiwang
  * @Date: 2020-07-15 22:46:27
  * @LastEditors: chenhaiwang
- * @LastEditTime: 2020-08-02 00:05:18
+ * @LastEditTime: 2020-08-02 19:02:18
  * @FilePath: \vue_management\src\components\user\users.vue
  * @Description: 头部注释
 --> 
 <template>
-  <div class=''>
+  <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -112,6 +112,7 @@
                 plain
                 icon="el-icon-setting"
                 size="mini"
+                @click="setRoleDialog(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -225,6 +226,42 @@
       </span>
     </el-dialog>
 
+    <!-- 分配角色框 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="setRoleVisible"
+      width="50%"
+      center
+      @close="setRoleClose"
+    >
+      <p>当前的用户：{{userInfo.username}}</p>
+      <p>当前的角色：{{userInfo.role_name}}</p>
+      <p>分配新角色：
+        <el-select
+          v-model="selectedRoleId"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in rolesList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </p>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="setRoleVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="setRoleOk"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -253,6 +290,8 @@ export default {
       dialogVisible: false,
       // 编辑用户弹框状态
       editUserVisible: false,
+      // 分配角色弹框状态
+      setRoleVisible: false,
       // form表单绑定值
       addForm: {
         username: "",
@@ -262,6 +301,12 @@ export default {
       },
       // 修改用户绑定值
       editForm: {},
+      // 用户角色信息
+      userInfo: {},
+      // 用户角色列表
+      rolesList: [],
+      // 选中角色的ID
+      selectedRoleId: "",
       // 用户表单验证
       FormRules: {
         username: [
@@ -400,6 +445,37 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    // 分配角色弹框
+    async setRoleDialog(userInfo) {
+      this.userInfo = userInfo;
+      const { data: res } = await this.$http.get("roles");
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取角色列表失败！");
+      }
+      this.rolesList = res.data;
+      // console.log(this.rolesList);
+      this.setRoleVisible = true;
+    },
+    // 分配角色
+    async setRoleOk() {
+      if (!this.selectedRoleId) {
+        return this.$message.error("请选择新角色！");
+      }
+      const { data: res } = await this.$http.put(
+        `users/${this.userInfo.id}/role`,
+        {
+          rid: this.selectedRoleId,
+        }
+      );
+      this.$message.success("设置角色成功!");
+      this.getUserList();
+      this.setRoleVisible = false;
+    },
+    // 重置分配角色
+    setRoleClose() {
+      this.selectedRoleId = "";
+      this.userInfo = "";
     },
   },
 };

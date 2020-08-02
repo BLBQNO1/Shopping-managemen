@@ -2,7 +2,7 @@
  * @Author: chenhaiwang
  * @Date: 2020-07-11 11:43:21
  * @LastEditors: chenhaiwang
- * @LastEditTime: 2020-07-15 23:10:01
+ * @LastEditTime: 2020-08-02 13:47:41
  * @FilePath: \vue_management\src\router\index.js
  * @Description: 头部注释
  */
@@ -12,6 +12,9 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Wecome from '../components/Wecome.vue'
 import Users from '../components/user/Users.vue'
+import Roles from '../components/roles/Roles.vue'
+import Rights from '../components/roles/Rights.vue'
+
 
 // 解决ElementUI导航栏中的vue-rotuer在3.0版本以上重复点菜单报错问题
 const originalPush = VueRouter.prototype.push
@@ -36,7 +39,9 @@ const routes = [
     redirect: '/wecome',
     children: [
       { path: '/wecome', component: Wecome },
-      { path: '/users', component: Users }
+      { path: '/users', component: Users },
+      { path: '/roles', component: Roles },
+      { path: '/rights', component: Rights },
     ]
   }
 ]

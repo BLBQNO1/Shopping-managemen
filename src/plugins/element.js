@@ -2,7 +2,7 @@
  * @Author: chenhaiwang
  * @Date: 2020-07-11 11:44:47
  * @LastEditors: chenhaiwang
- * @LastEditTime: 2020-08-01 23:54:24
+ * @LastEditTime: 2020-08-02 18:36:56
  * @FilePath: \vue_management\src\plugins\element.js
  * @Description: 头部注释
  */
@@ -31,7 +31,11 @@ import {
   Tooltip,
   Pagination,
   Dialog,
-  MessageBox
+  MessageBox,
+  Tag,
+  Tree,
+  Select,
+  Option
 } from 'element-ui'
 
 
@@ -60,6 +64,12 @@ Vue.use(Switch)
 Vue.use(Tooltip)
 Vue.use(Pagination)
 Vue.use(Dialog)
+Vue.use(Tag)
+Vue.use(Tree)
+Vue.use(Select)
+Vue.use(Option)
+
+
 
 
 

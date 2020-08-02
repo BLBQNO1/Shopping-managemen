@@ -2,8 +2,8 @@
  * @Author: chenhaiwang
  * @Date: 2020-07-12 14:41:14
  * @LastEditors: chenhaiwang
- * @LastEditTime: 2020-07-13 22:15:12
- * @FilePath: \vue_management\src\components\login.vue
+ * @LastEditTime: 2020-08-02 20:25:20
+ * @FilePath: \vue_management\src\components\Login.vue
  * @Description: 头部注释
 --> 
 <template>
@@ -58,21 +58,31 @@ export default {
       // 登录表单的数据绑定对象
       loginForm: {
         username: "admin",
-        password: "123456"
+        password: "123456",
       },
       // 表单验证规则
       rules: {
         // 验证用户名是否合法
         username: [
           { required: true, message: "请输入用户名称", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
+          {
+            min: 2,
+            max: 10,
+            message: "长度在 2 到 10 个字符",
+            trigger: "blur",
+          },
         ],
         // 验证密码是否合法
         password: [
           { required: true, message: "请输入用户密码", trigger: "blur" },
-          { min: 6, max: 16, message: "长度在 6 到 16 个字符", trigger: "blur" }
-        ]
-      }
+          {
+            min: 6,
+            max: 16,
+            message: "长度在 6 到 16 个字符",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -84,11 +94,11 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
-      this.$refs.loginFormRef.validate(async valid => {
+      this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
         const { data: res } = await this.$http.post("login", this.loginForm);
-        console.log(res);
-        if (res.meta.status != 200) this.$message.error("登录失败！");
+        // console.log(res);
+        if (res.meta.status != 200) return this.$message.error("登录失败！");
         this.$message.success("登录成功");
         // 1.将登录成功之后的token，保存到客户端的sessionStorage中
         //  1.1项目中除了登录之外的其他api接口，必须在登录之后才能访问
@@ -97,8 +107,8 @@ export default {
         // 2.通过编程式导航到home页面
         this.$router.push("/home");
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
